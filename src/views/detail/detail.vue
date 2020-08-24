@@ -4,11 +4,11 @@
     <scroll class="contents" ref="scrolls">
       <detail-swiper :swiperitems="itemInfo" />
       <detail-title :goods="goods" />
-      <detail-images :imagesList="detailImage"/>
-      <item-params :params="itemParams"/>
-      <comments-more/>
+      <detail-images :imagesList="detailImage" @detailImageLoad="detailImageLoad"/>
+      <item-params :params="itemParams" ref="itemparams"/>
+      <comments-more ref="comment"/>
       <comments :comments="comments"/>
-      <goods-list :goods="recommendList"/>
+      <goods-list :goods="recommendList" ref="recommend"/>
       <ul>
         <li>1</li>
         <li>2</li>
@@ -83,6 +83,7 @@ import Scroll from "../../components/common/scroll/scroll"
 import goodsList from "../../components/content/goodsList"
 
 import { getRecommendData, getDetailData, Goods , Comments} from "../../network/detail"
+import {debounce} from "../../../utils/debounce"
 
 export default {
   name: "detail",
@@ -107,7 +108,8 @@ export default {
       itemParams:{},
       comments:{},
       recommendList:[],
-      topYs:[0,1000,2000,3000]
+      topYs:[],
+      detailImageDebounce:null
     };
   },
   mounted() {
@@ -146,7 +148,7 @@ export default {
         res.data.result.shopInfo,
         res.data.result.detailInfo
       );
-      
+
       this.detailImage = this.goods.detailImage
       console.log(this.detailImage);
     });
@@ -154,6 +156,24 @@ export default {
   methods:{
     tabClick(index){
       this.$refs.scrolls.bs.scrollTo(0,-this.topYs[index],300)
+    },
+    detailImageLoad(){
+      this.detailImageDebounce = debounce(()=>{
+        this.topYs = []
+        this.topYs.push(0)
+        this.topYs.push(this.$refs.itemparams.$el.offsetTop)
+        this.topYs.push(this.$refs.comment.$el.offsetTop)
+        this.topYs.push(this.$refs.recommend.$el.offsetTop)
+      },100)
+
+      this.detailImageDebounce()
+        // this.topYs = []
+
+        // this.topYs.push(0)
+        // this.topYs.push(this.$refs.itemparams.$el.offsetTop)
+        // this.topYs.push(this.$refs.comment.$el.offsetTop)
+        // this.topYs.push(this.$refs.recommend.$el.offsetTop)
+        // console.log( this.topYs)
     }
   }
 };
