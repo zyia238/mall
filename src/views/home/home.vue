@@ -74,12 +74,13 @@ export default {
     this.getGoodsItems("pop");
     this.getGoodsItems("new");
     this.getGoodsItems("sell");
+    
   },
   mounted() {
     // const refresh = this.$refs.scrolls.bs.refresh;
     // const refresher = this.debounce(refresh, 500);
 
-    this.$bus.$on("imgload", () => {
+    this.$bus.$on("homeimgload", () => {
       //因为每一张图片加载完毕后都会通过组件通信传递给home组件，这致使home组件需要调用相同的refresh函数多次
       //我们需要对调用同一函数多次的现象进行防抖动处理
       this.$refs.scrolls.bs.refresh();
@@ -143,6 +144,7 @@ export default {
         this.goods[type].page += 1;
 
         this.$refs.scrolls.bs.finishPullUp();
+        console.log(this.goods)
       });
     },
     backToTop() {

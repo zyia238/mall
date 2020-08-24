@@ -1,14 +1,13 @@
 <template>
   <div class="detailwrapper">
     <detail-nav-bar />
-    <scroll class="contents">
+    <scroll class="contents" ref="scrolls">
       <detail-swiper :swiperitems="itemInfo" />
       <detail-title :goods="goods" />
       <item-params :params="itemParams"/>
       <comments-more/>
       <comments :comments="comments"/>
-      
-      
+      <goods-list :goods="recommendList"/>
       <ul>
         <li>1</li>
         <li>2</li>
@@ -72,7 +71,6 @@
 
 <script>
 import detailNavBar from "./childComponents/detailNavBar"
-import { getDetailData, Goods , Comments} from "../../network/detail"
 import detailSwiper from "./childComponents/detailSwiper"
 import detailTitle from "./childComponents/detailTiltle"
 import itemParams from "./childComponents/itemParams"
@@ -80,6 +78,9 @@ import commentsMore from "./childComponents/commentsMore"
 import comments from "./childComponents/comments"
 
 import Scroll from "../../components/common/scroll/scroll"
+import goodsList from "../../components/content/goodsList"
+
+import { getRecommendData, getDetailData, Goods , Comments} from "../../network/detail"
 
 export default {
   name: "detail",
@@ -90,40 +91,35 @@ export default {
     itemParams,
     Scroll,
     commentsMore,
-    comments
+    comments,
+    goodsList
   },
   data() {
     return {
       //详情页在这里通过路由地址的后缀对iid进行接收，并在详情页发送网络请求请求相关item的数据。
       iid: null,
-      itemInfo: {
-        type: Array,
-        default() {
-          return [];
-        }
-      },
-      goods: {
-        type: Object,
-        default() {
-          return {};
-        }
-      },
-      itemParams:{
-        type: Object,
-        default() {
-          return {};
-        }
-      },
-      comments:{
-        type: Object,
-        default() {
-          return {};
-        }
-      }
+      itemInfo: [],
+      goods: {},
+      itemParams:{},
+      comments:{},
+      recommendList:[]
     };
+  },
+  mounted() {
+    this.$bus.$on("detailimgload", () => {
+      this.$refs.scrolls.bs.refresh();
+    });
   },
   created() {
     this.iid = this.$route.params.iid;
+
+    getRecommendData().then(res => {
+      console.log(res)  
+      this.recommendList = res.data.data.list;
+      console.log(this.recommendList)
+
+    })
+
     getDetailData(this.iid).then(res => {
       console.log(res);
       this.itemInfo = res.data.result.itemInfo.topImages;
@@ -136,14 +132,14 @@ export default {
       res.data.result.rate.list[0].created,
       res.data.result.rate.list[0].style
       );
-      console.log(this.comments);
+      // console.log(this.comments);
 
       this.goods = new Goods(
         res.data.result.columns,
         res.data.result.itemInfo,
         res.data.result.shopInfo
       );
-      console.log(this.goods);
+      // console.log(this.goods);
     });
   }
 };

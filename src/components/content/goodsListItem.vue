@@ -1,46 +1,60 @@
 <template>
   <div class="goodslistitem" @click="itemClick">
-      <a>
-      <img :src="goodsitem.show.img" @load="imgload" alt="">
+    <a>
+      <img :src="goodsItemImage" @load="imgload" alt />
       <div>
-          <h2>{{goodsitem.title}}</h2>
-          <span>{{goodsitem.cfav}}</span>
-          <span>{{goodsitem.price}}</span>
+        <h2>{{goodsitem.title}}</h2>
+        <span>{{goodsitem.cfav}}</span>
+        <span>{{goodsitem.price}}</span>
       </div>
-      </a>
+    </a>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'goodsListItem',
-    props:{
-        goodsitem:{
-            type:Object,
-            default(){
-                return {}
-            }
-        }
-    },
-    methods:{
-        imgload(){
-            // this.$emit('imgload')
-            this.$bus.$emit('imgload');
-        },
-        itemClick(){
-            this.$router.push('/detail/' + this.goodsitem.iid)
-        }
+  name: "goodsListItem",
+  props: {
+    goodsitem: {
+      type: Object,
+      default() {
+        return {};
+      }
     }
-}
+  },
+  computed: {
+    goodsItemImage() {
+      // return this.goodsitem.image || this.goodsitem.show.img
+
+      return this.goodsitem.image
+        ? this.goodsitem.image
+        : this.goodsitem.show.img;
+
+      //return this.goodsitem.show.img || this.goodsitem.image 逻辑或的前后顺序
+    }
+  },
+  methods: {
+    imgload() {
+      if (this.$route.path.indexOf("/home") !== -1) {
+        this.$bus.$emit("homeimgload");
+      }else if (this.$route.path.indexOf("/detail") !==-1){
+        this.$bus.$emit("detailimgload")
+      }
+    },
+    itemClick() {
+      this.$router.push("/detail/" + this.goodsitem.iid);
+    }
+  }
+};
 </script>
 
 <style lang="" scoped>
-.goodslistitem{
-    width: 46%;
-    z-index: 1
+.goodslistitem {
+  width: 46%;
+  z-index: 1;
 }
 
-.goodslistitem img{
-    width: 100%;
+.goodslistitem img {
+  width: 100%;
 }
 </style>
