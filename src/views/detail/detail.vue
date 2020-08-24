@@ -9,63 +9,7 @@
       <comments-more ref="comment"/>
       <comments :comments="comments"/>
       <goods-list :goods="recommendList" ref="recommend"/>
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-        <li>5</li>
-        <li>6</li>
-        <li>7</li>
-        <li>8</li>
-        <li>9</li>
-        <li>10</li>
-        <li>11</li>
-        <li>12</li>
-        <li>13</li>
-        <li>14</li>
-        <li>15</li>
-        <li>16</li>
-        <li>17</li>
-        <li>18</li>
-        <li>19</li>
-        <li>20</li>
-        <li>21</li>
-        <li>22</li>
-        <li>23</li>
-        <li>24</li>
-        <li>25</li>
-        <li>26</li>
-        <li>27</li>
-        <li>28</li>
-        <li>29</li>
-        <li>30</li>
-        <li>31</li>
-        <li>32</li>
-        <li>33</li>
-        <li>34</li>
-        <li>35</li>
-        <li>36</li>
-        <li>37</li>
-        <li>38</li>
-        <li>39</li>
-        <li>40</li>
-        <li>41</li>
-        <li>42</li>
-        <li>43</li>
-        <li>44</li>
-        <li>45</li>
-        <li>46</li>
-        <li>47</li>
-        <li>48</li>
-        <li>49</li>
-        <li>50</li>
-        <li>51</li>
-        <li>52</li>
-        <li>53</li>
-        <li>54</li>
-        <li>55</li>
-      </ul>
+      
     </scroll>
   </div>
 </template>
@@ -108,11 +52,15 @@ export default {
       itemParams:{},
       comments:{},
       recommendList:[],
+      //保存每一个tab的offsetTop高度
       topYs:[],
+      //预先定义一个detailImage的防抖函数
       detailImageDebounce:null
     };
   },
   mounted() {
+    //原先的goodslistItem的imageload事件也会造成home组件中的scrolls组件调用refresh方法
+    //所以detail中的goodslistItem会emit出一个不同事件
     this.$bus.$on("detailimgload", () => {
       this.$refs.scrolls.bs.refresh();
     });
@@ -129,7 +77,7 @@ export default {
     })
 
     getDetailData(this.iid).then(res => {
-      console.log(res);
+      // console.log(res);
       this.itemInfo = res.data.result.itemInfo.topImages;
 
       this.itemParams = res.data.result.itemParams;
@@ -150,13 +98,16 @@ export default {
       );
 
       this.detailImage = this.goods.detailImage
-      console.log(this.detailImage);
+      // console.log(this.detailImage);
     });
   },
   methods:{
     tabClick(index){
       this.$refs.scrolls.bs.scrollTo(0,-this.topYs[index],300)
     },
+
+    //detailImages完成加载后的处理函数，因为组件的offsetTop受detailImages的高度影响最大
+    //我们在所有images加载完后获取的每个tab的offsetTop才是较为准确的高度
     detailImageLoad(){
       this.detailImageDebounce = debounce(()=>{
         this.topYs = []
@@ -165,15 +116,7 @@ export default {
         this.topYs.push(this.$refs.comment.$el.offsetTop)
         this.topYs.push(this.$refs.recommend.$el.offsetTop)
       },100)
-
       this.detailImageDebounce()
-        // this.topYs = []
-
-        // this.topYs.push(0)
-        // this.topYs.push(this.$refs.itemparams.$el.offsetTop)
-        // this.topYs.push(this.$refs.comment.$el.offsetTop)
-        // this.topYs.push(this.$refs.recommend.$el.offsetTop)
-        // console.log( this.topYs)
     }
   }
 };

@@ -144,7 +144,7 @@ export default {
         this.goods[type].page += 1;
 
         this.$refs.scrolls.bs.finishPullUp();
-        console.log(this.goods)
+        // console.log(this.goods)
       });
     },
     backToTop() {
