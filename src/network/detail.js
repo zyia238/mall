@@ -16,7 +16,7 @@ export function getRecommendData(){
 }
 
 export class Goods{
-    constructor(columns,itemInfo,shopInfo){
+    constructor(columns,itemInfo,shopInfo,detailInfo){
         this.title = itemInfo.title;
         this.columns =  columns;
         this.desc = itemInfo.desc;
@@ -25,6 +25,7 @@ export class Goods{
         this.oldPrice = itemInfo.oldPrice;
         this.services = shopInfo.services;
         this.realPrice = itemInfo.lowNowPrice;
+        this.detailImage = detailInfo.detailImage[0].list
     }
 }
 

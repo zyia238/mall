@@ -1,9 +1,10 @@
 <template>
   <div class="detailwrapper">
-    <detail-nav-bar />
+    <detail-nav-bar @tabClick="tabClick"/>
     <scroll class="contents" ref="scrolls">
       <detail-swiper :swiperitems="itemInfo" />
       <detail-title :goods="goods" />
+      <detail-images :imagesList="detailImage"/>
       <item-params :params="itemParams"/>
       <comments-more/>
       <comments :comments="comments"/>
@@ -76,6 +77,7 @@ import detailTitle from "./childComponents/detailTiltle"
 import itemParams from "./childComponents/itemParams"
 import commentsMore from "./childComponents/commentsMore"
 import comments from "./childComponents/comments"
+import detailImages from "./childComponents/detailImages"
 
 import Scroll from "../../components/common/scroll/scroll"
 import goodsList from "../../components/content/goodsList"
@@ -92,7 +94,8 @@ export default {
     Scroll,
     commentsMore,
     comments,
-    goodsList
+    goodsList,
+    detailImages
   },
   data() {
     return {
@@ -100,9 +103,11 @@ export default {
       iid: null,
       itemInfo: [],
       goods: {},
+      detailImage:[],
       itemParams:{},
       comments:{},
-      recommendList:[]
+      recommendList:[],
+      topYs:[0,1000,2000,3000]
     };
   },
   mounted() {
@@ -110,13 +115,14 @@ export default {
       this.$refs.scrolls.bs.refresh();
     });
   },
+  
   created() {
     this.iid = this.$route.params.iid;
 
     getRecommendData().then(res => {
-      console.log(res)  
+      // console.log(res)  
       this.recommendList = res.data.data.list;
-      console.log(this.recommendList)
+      // console.log(this.recommendList)
 
     })
 
@@ -137,10 +143,18 @@ export default {
       this.goods = new Goods(
         res.data.result.columns,
         res.data.result.itemInfo,
-        res.data.result.shopInfo
+        res.data.result.shopInfo,
+        res.data.result.detailInfo
       );
-      // console.log(this.goods);
+      
+      this.detailImage = this.goods.detailImage
+      console.log(this.detailImage);
     });
+  },
+  methods:{
+    tabClick(index){
+      this.$refs.scrolls.bs.scrollTo(0,-this.topYs[index],300)
+    }
   }
 };
 </script>
