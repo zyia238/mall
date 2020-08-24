@@ -24,16 +24,17 @@ export default {
   },
   computed: {
     goodsItemImage() {
-      // return this.goodsitem.image || this.goodsitem.show.img
+      // 通过recommend接口请求回来的数据只需要直接调用image属性，而没有show.img属性
 
       return this.goodsitem.image
         ? this.goodsitem.image
         : this.goodsitem.show.img;
 
-      //return this.goodsitem.show.img || this.goodsitem.image 逻辑或的前后顺序
+      //return this.goodsitem.show.img || this.goodsitem.image 注意逻辑或的前后顺序
     }
   },
   methods: {
+    //通过路由的方式做判断，如果当前在detail页面，就不需要发送需要让home组件刷新的自定义事件了
     imgload() {
       if (this.$route.path.indexOf("/home") !== -1) {
         this.$bus.$emit("homeimgload");

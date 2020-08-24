@@ -1,7 +1,7 @@
 <template>
   <div class="detailwrapper">
-    <detail-nav-bar @tabClick="tabClick"/>
-    <scroll class="contents" ref="scrolls">
+    <detail-nav-bar @tabClick="tabClick" ref="detailNavBar"/>
+    <scroll class="contents" ref="scrolls" @backtotop="positionHandle">
       <detail-swiper :swiperitems="itemInfo" />
       <detail-title :goods="goods" />
       <detail-images :imagesList="detailImage" @detailImageLoad="detailImageLoad"/>
@@ -55,7 +55,8 @@ export default {
       //保存每一个tab的offsetTop高度
       topYs:[],
       //预先定义一个detailImage的防抖函数
-      detailImageDebounce:null
+      detailImageDebounce:null,
+      scrollIndex:0
     };
   },
   mounted() {
@@ -102,6 +103,22 @@ export default {
     });
   },
   methods:{
+    positionHandle(position){
+      // console.log(position)
+      if(-position.y >= 0 && -position.y < this.topYs[1]){
+        this.scrollIndex = 0;
+        // console.log(this.scrollIndex)
+      }else if(-position.y >= this.topYs[1] && -position.y < this.topYs[2]){
+        this.scrollIndex = 1;
+      }else if(-position.y >= this.topYs[2] && -position.y < this.topYs[3]){
+        this.scrollIndex = 2;
+      }else if(-position.y >= this.topYs[3]){
+        this.scrollIndex = 3;
+      }
+      //此处没有用props父子间通信的方式
+      this.$refs.detailNavBar.currentIndex = this.scrollIndex
+    },
+
     tabClick(index){
       this.$refs.scrolls.bs.scrollTo(0,-this.topYs[index],300)
     },
