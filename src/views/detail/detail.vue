@@ -1,6 +1,6 @@
 <template>
   <div class="detailwrapper">
-    <detail-nav-bar @tabClick="tabClick" ref="detailNavBar"/>
+    <detail-nav-bar @tabClick="tabClick" ref="detailNavBar" :tabIndex="scrollIndex"/>
     <scroll class="contents" ref="scrolls" @backtotop="positionHandle">
       <detail-swiper :swiperitems="itemInfo" />
       <detail-title :goods="goods" />
@@ -8,9 +8,10 @@
       <item-params :params="itemParams" ref="itemparams"/>
       <comments-more ref="comment"/>
       <comments :comments="comments"/>
-      <goods-list :goods="recommendList" ref="recommend"/>
-      
+      <goods-list :goods="recommendList" ref="recommend"/> 
     </scroll>
+    <back-to-top @click.native="backToTop" v-show="isShow"/>
+    <bottom-bar/>
   </div>
 </template>
 
@@ -22,9 +23,11 @@ import itemParams from "./childComponents/itemParams"
 import commentsMore from "./childComponents/commentsMore"
 import comments from "./childComponents/comments"
 import detailImages from "./childComponents/detailImages"
+import bottomBar from "./childComponents/detailBottomBar"
 
 import Scroll from "../../components/common/scroll/scroll"
 import goodsList from "../../components/content/goodsList"
+import backToTop from "../../components/content/backToTop"
 
 import { getRecommendData, getDetailData, Goods , Comments} from "../../network/detail"
 import {debounce} from "../../../utils/debounce"
@@ -40,7 +43,9 @@ export default {
     commentsMore,
     comments,
     goodsList,
-    detailImages
+    detailImages,
+    bottomBar,
+    backToTop
   },
   data() {
     return {
@@ -56,7 +61,8 @@ export default {
       topYs:[],
       //预先定义一个detailImage的防抖函数
       detailImageDebounce:null,
-      scrollIndex:0
+      scrollIndex:0,
+      isShow: false
     };
   },
   mounted() {
@@ -103,6 +109,9 @@ export default {
     });
   },
   methods:{
+    backToTop() {
+      this.$refs.scrolls.bs.scrollTo(0, 0, 500);
+    },
     positionHandle(position){
       // console.log(position)
       if(-position.y >= 0 && -position.y < this.topYs[1]){
@@ -115,8 +124,10 @@ export default {
       }else if(-position.y >= this.topYs[3]){
         this.scrollIndex = 3;
       }
-      //此处没有用props父子间通信的方式
+      //此处如果用props父子传值的方法不太好处理
       this.$refs.detailNavBar.currentIndex = this.scrollIndex
+
+      this.isShow = -position.y >1000? true : false
     },
 
     tabClick(index){
@@ -144,7 +155,7 @@ export default {
     height: 100vh;
 }
 .contents {
-    height: calc(100% - 44px);
+    height: calc(100% - 44px - 49px);
     position: relative;
     z-index: 998;
     background: #fff;

@@ -18,6 +18,14 @@
 import navBar from '../../../components/common/navbar'
 export default {
   name: 'detailNavBar',
+  props:{
+      tabIndex:{
+          type:Number,
+          default(){
+              return 0
+          }
+      }
+  },
   data(){
       return {
           currentIndex:0,
@@ -26,8 +34,8 @@ export default {
   },
   methods:{
       tabClick(index){
-          this.currentIndex = index;
-          this.$emit('tabClick',index)
+        this.currentIndex = index;
+        this.$emit('tabClick',index)
       },
       backClick(){
           this.$router.go(-1)
