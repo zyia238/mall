@@ -12,14 +12,19 @@
       <div></div>
       <span>收藏</span>
     </div>
-    <div class="cart">购物车</div>
+    <div class="cart" @click="addToCart">购物车</div>
     <div class="purchase">购买</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "detaiBottomBar"
+  name: "detaiBottomBar",
+  methods:{
+    addToCart(){
+      this.$emit('addToCart')
+    }
+  }
 };
 </script>
 

@@ -11,7 +11,7 @@
       <goods-list :goods="recommendList" ref="recommend"/> 
     </scroll>
     <back-to-top @click.native="backToTop" v-show="isShow"/>
-    <bottom-bar/>
+    <bottom-bar @addToCart="addToCart"/>
   </div>
 </template>
 
@@ -109,6 +109,17 @@ export default {
     });
   },
   methods:{
+    addToCart(){
+      const mygoods = {}
+      //详情页收集到的该商品的数据有很多，我们挑选需要在购物车栏里展示的数据发送到vuex进行状态管理
+      mygoods.iid = this.iid
+      mygoods.image = this.itemInfo[0]
+      mygoods.title = this.goods.title
+      mygoods.price = this.goods.oldPrice
+      mygoods.desc = this.goods.desc
+
+      this.$store.commit('addCart',mygoods)
+    },
     backToTop() {
       this.$refs.scrolls.bs.scrollTo(0, 0, 500);
     },
