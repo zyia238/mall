@@ -15,12 +15,14 @@ const store = new Vuex.Store({
                 oldProduct.count++
             }else{
                 payLoad.count = 1;
+                payLoad.checked = true;
                 state.cartList.push(payLoad)
-            }
+            }            
+        },
+        isChecked(state,payLoad){
+            let oldProduct = state.cartList.find(item => item.iid == payLoad)
 
-            
-
-            
+            oldProduct.checked = !oldProduct.checked
         }
     }
 })

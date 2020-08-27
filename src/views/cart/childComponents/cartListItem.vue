@@ -1,6 +1,6 @@
 <template>
   <div class="cartListItem">
-    <!-- <div class="checkButoon"></div> -->
+    <check-button @click.native="buttonCheck" :isChecked="item.checked"/>
     <div class="shortcutImage">
       <img :src="item.image" alt />
     </div>
@@ -10,7 +10,6 @@
       <div class="pricewrapper">
         <span class="itemprice">{{item.price}}</span>
         <span>{{"x" + item.count}}
-
         </span>
       </div>
     </div>
@@ -18,14 +17,24 @@
 </template>
 
 <script>
+import checkButton from "./checkButton"
+
 export default {
   name: "cartListItem",
+  components:{
+    checkButton
+  },
   props: {
     item: {
       type: Object,
       default() {
         return {};
       }
+    }
+  },
+  methods:{
+    buttonCheck(){
+      this.$store.commit('isChecked',this.item.iid)
     }
   }
 };
@@ -43,7 +52,7 @@ export default {
 }
 
 .titles {
-    position: relative;
+  position: relative;
   flex: 1;
 }
 
