@@ -6,6 +6,7 @@
     <scroll class="cart-list-content" ref="scrolls">
       <cart-list/>
     </scroll>
+    <check-out-bar/>
   </div>
 </template>
 
@@ -14,13 +15,15 @@ import Scroll from '../../components/common/scroll/scroll'
 import navBar from '../../components/common/navbar'
 
 import cartList from './childComponents/cartList'
+import checkOutBar from "./childComponents/checkOutBar"
 
 export default {
   name: 'cart',
   components:{
     Scroll,
     navBar,
-    cartList
+    cartList,
+    checkOutBar
   }
   ,
   //修复购物车无法滚动的bug
