@@ -36,9 +36,10 @@ export default {
   border-bottom:2px solid grey;
   height: 150px;
   display: flex;
+  background: white
 }
 .shortcutImage img {
-  height: 100%;
+  height: 148px
 }
 
 .titles {

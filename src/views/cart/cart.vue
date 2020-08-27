@@ -36,14 +36,19 @@ export default {
 
 #cart{
   height:100vh;
-  width: 100%;
 }
 
 .cartNavBar{
-  background:pink
+  position:fixed;
+  top: 0;
+  width: 100%;
+  background:pink;
+  z-index:999
 }
 
 .cart-list-content{
-  height: calc(100% - 44px)
+  margin-top:44px;
+  height: calc(100% - 44px - 49px)
 }
+
 </style>
