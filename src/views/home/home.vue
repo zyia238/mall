@@ -115,22 +115,12 @@ export default {
           this.currentGoods = "sell";
           break;
       }
-
+    
+    //处理两个tabcontrol选中项显示不一致的问题
       this.$refs.tabControl1.currentIndex = index;
       this.$refs.tabControl2.currentIndex = index;
     },
-    //防抖函数的确能够提升些许性能，但在实际开发过程中，业务永远优先于性能
-    // debounce(func, delay) {
-    //   let timer = null;
-    //   return function(...args) {
-    //     if (timer) {
-    //       clearTimeout(timer);
-    //     }
-    //     timer = setTimeout(() => {
-    //       func.apply(this,args);
-    //     }, delay);
-    //   };
-    // },
+
     getHomeData() {
       getHomeData().then(res => {
         this.banners = res.data.data.banner.list;

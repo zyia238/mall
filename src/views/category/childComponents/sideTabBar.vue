@@ -36,17 +36,8 @@ export default {
           }
       }
   },
-  activated(){
-      this.currentIndex = this.saveIndex
-  },
-
-  deactivated(){
-      this.saveIndex = this.currentIndex
-  },
   watch:{
       $route(to,from){
-          console.log(to)
-          console.log(from)
           if(to.fullPath == '/category/3627'){
               this.currentIndex = 0;
           }

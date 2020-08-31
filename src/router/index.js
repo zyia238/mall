@@ -23,7 +23,7 @@ export default new Router({
     {
         path:'/category',
         component:Category,
-        redirect:'/category/3627',
+        // redirect:'/category/3627',
         children:[
           {
             path:':maitKey',

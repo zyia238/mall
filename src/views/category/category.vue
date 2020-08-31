@@ -8,13 +8,15 @@
     
     <div class="middleWrapper">
       <scroll>
-      <div class="leftHandSide">
-          <side-tab-bar :categoryList="categoryList" @switchSub="switchSub"/>
+      <div class="leftHandSide" >
+          <side-tab-bar :categoryList="categoryList" @switchSub="switchSub" ref="sideTabBar"/>
       </div>
       </scroll>
       <scroll ref="subList">
       <div class="rightHandSide">
+        <keep-alive>
           <router-view/>
+        </keep-alive>   
       </div>
       </scroll>
     </div>
@@ -39,28 +41,60 @@ export default {
   data() {
     return {
       categoryList: [],
+      currentKey:'3627',
+      saveKey:0
     };
   },
   methods:{
       switchSub(maitKey){
-          this.$router.replace('/category/' + maitKey)
+        console.log(maitKey)
+          this.currentKey = maitKey
+          this.$router.replace('/category/' + this.currentKey)
       },
       backClick(){
           this.$router.go(-1)
       }
   },
   created() {
+    // this.$router.replace('/category/' + this.currentKey)
+
     getCategoryData().then(res => {
-      console.log(res);
+      // console.log(res);
+      
       this.categoryList.push(...res.data.data.category.list);
+      
       //   console.log(this.categoryList)
     });
   },
   mounted(){
+    
     this.$bus.$on('subsImageLoad',()=>{
       this.$refs.subList.bs.refresh()
     })
-  }
+  },
+  //保存分类页面tabbar已浏览信息
+  beforeRouteEnter (to, from, next) {
+  next(vm => {
+    // console.log(vm.$refs.sideTabBar.currentIndex)
+    vm.$refs.sideTabBar.currentIndex = vm.$refs.sideTabBar.saveIndex
+    vm.currentKey = vm.saveKey
+    if(vm.saveKey === 0){
+      vm.$router.replace('/category/3627')
+    }else{
+      console.log(vm.saveKey)
+      vm.$router.replace('/category/' + vm.saveKey)
+    }
+
+  })
+},
+
+  beforeRouteLeave (to, from, next) { 
+    this.$refs.sideTabBar.saveIndex = this.$refs.sideTabBar.currentIndex
+    this.saveKey = this.$route.params.maitKey
+    console.log(this.$route.params.maitKey)
+    // console.log(this.$refs.sideTabBar)
+    next()
+  },
 };
 </script>
 

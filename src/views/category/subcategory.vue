@@ -23,6 +23,7 @@ export default {
   },
   mounted() {
     this.subs = [];
+    // console.log(this.$route.params.maitKey)
     if (this.$route.params.maitKey) {
       getSubCategoryData(this.$route.params.maitKey).then(res => {
         this.subs.push(...res.data.data.list);
