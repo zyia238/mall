@@ -26,7 +26,7 @@ export default {
       for (let item of checkedItems) {
         total += item.price.substr(1) * item.count;
       }
-      return total.toFixed(2);
+      return "￥" + total.toFixed(2);
     },
     counts() {
       const counts = this.$store.state.cartList;

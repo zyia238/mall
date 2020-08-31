@@ -4,6 +4,9 @@
       <tabbar-item path="/home">
         <div>首页</div>
       </tabbar-item>
+      <tabbar-item path="/category">
+        <div>分类</div>
+      </tabbar-item>
       <tabbar-item path="/cart">
         <div>购物车</div>
       </tabbar-item>
