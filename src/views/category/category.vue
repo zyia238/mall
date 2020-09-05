@@ -7,6 +7,7 @@
     </nav-bar>
     
     <div class="middleWrapper">
+      <!-- 左边的列表和右边的显示需要分别使用滚动加以控制 -->
       <scroll>
       <div class="leftHandSide" >
           <side-tab-bar :categoryList="categoryList" @switchSub="switchSub" ref="sideTabBar"/>
@@ -67,12 +68,11 @@ export default {
     });
   },
   mounted(){
-    
     this.$bus.$on('subsImageLoad',()=>{
       this.$refs.subList.bs.refresh()
     })
   },
-  //保存分类页面tabbar已浏览信息
+  //保存分类页面tabbar已浏览信息以防在切换页面的时候刷新组件
   beforeRouteEnter (to, from, next) {
   next(vm => {
     // console.log(vm.$refs.sideTabBar.currentIndex)

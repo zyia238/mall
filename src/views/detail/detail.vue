@@ -32,6 +32,12 @@ import backToTop from "../../components/content/backToTop"
 import { getRecommendData, getDetailData, Goods , Comments} from "../../network/detail"
 import {debounce} from "../../../utils/debounce"
 
+import Vue from 'vue';
+import { Toast } from 'vant';
+import "vant/lib/index.css";
+
+Vue.use(Toast);
+
 export default {
   name: "detail",
   components: {
@@ -119,6 +125,8 @@ export default {
       mygoods.desc = this.goods.desc
 
       this.$store.commit('addCart',mygoods)
+
+      Toast('成功将商品加入购物车');
     },
     backToTop() {
       this.$refs.scrolls.bs.scrollTo(0, 0, 500);

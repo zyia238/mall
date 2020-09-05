@@ -3,6 +3,7 @@
     <navbar class="homenavbar">
       <div slot="mid">首页欢迎你</div>
     </navbar>
+    <!-- 用作障眼法的tab栏 -->
     <tab-control :titles="['新品','热门','时尚']" @tabClick="handleTabClick" ref="tabControl1" class="tab-control"
     v-show="isTabControlFixed"/>
     <scroll
@@ -12,10 +13,10 @@
       :probe-type="3"
       @pullingup="pullinguphandle(currentGoods)"
     >
-      <home-swiper :banners="banners" class="home_swiper" @homeSwiperImageLoad="swiperHandler"></home-swiper>
+      <home-swiper :banners="banners" class="home_swiper" @homeSwiperImageLoad="swiperHandler"/>
       <recommends :recommends="recommends" class="recommends" />
       <weekly />
-      <tab-control :titles="['新品','热门','时尚']" @tabClick="handleTabClick" ref="tabControl2"></tab-control>
+      <tab-control :titles="['新品','热门','时尚']" @tabClick="handleTabClick" ref="tabControl2"/>
       <goods-list :goods="showGoods" class="goodslist" />
     </scroll>
     <!-- 监听组件的原生事件时需要使用native修饰符 -->
@@ -65,6 +66,7 @@ export default {
     };
   },
   computed: {
+    //向goodslist传递选中项的list
     showGoods() {
       return this.goods[this.currentGoods].list;
     }
@@ -132,7 +134,7 @@ export default {
       getGoodsItems(type, page).then(res => {
         this.goods[type].list.push(...res.data.data.list);
         this.goods[type].page += 1;
-
+        //better-scorll中上拉加载更多完成后需要手动结束事件
         this.$refs.scrolls.bs.finishPullUp();
         // console.log(this.goods)
       });
@@ -141,9 +143,9 @@ export default {
       this.$refs.scrolls.bs.scrollTo(0, 0, 500);
     },
     scrollHandle(position) {
-      //position对象中的y属性始终为负数值
+      //控制返回顶部组件
       this.isShow = -position.y > 1500;
-      //44 为navbar的高度
+      //44 为navbar的高度，当真实的tabControl栏滚动至看不见时，显示准备好的第二个tabControl,模拟在better-scroll中的吸顶效果
       this.isTabControlFixed = -position.y + 44> this.offsetTop;
     },
     pullinguphandle(type) {
