@@ -37,6 +37,8 @@ import homeSwiper from "./home_components/homeswiper";
 import recommends from "./home_components/recommends";
 import weekly from "./home_components/weekly";
 
+
+
 export default {
   name: "home",
   components: {

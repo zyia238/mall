@@ -43,12 +43,12 @@ export default {
     return {
       categoryList: [],
       currentKey:'3627',
-      saveKey:0
+      saveKey:0,
     };
   },
   methods:{
       switchSub(maitKey){
-        console.log(maitKey)
+        // console.log(maitKey)
           this.currentKey = maitKey
           this.$router.replace('/category/' + this.currentKey)
       },
@@ -57,14 +57,9 @@ export default {
       }
   },
   created() {
-    // this.$router.replace('/category/' + this.currentKey)
-
-    getCategoryData().then(res => {
-      // console.log(res);
-      
+    getCategoryData().then(res => {    
       this.categoryList.push(...res.data.data.category.list);
-      
-      //   console.log(this.categoryList)
+      // console.log(res)
     });
   },
   mounted(){

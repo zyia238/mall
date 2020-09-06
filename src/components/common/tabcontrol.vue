@@ -26,6 +26,7 @@ export default {
       itemclick:function(index){
           this.currentIndex = index;
           this.$emit('tabClick',index);
+          this.$bus.$emit('categoryTabClick',index)
       }
   }
 }

@@ -25,11 +25,17 @@ export default {
   computed: {
     goodsItemImage() {
       // 通过recommend接口请求回来的数据只需要直接调用image属性，而没有show.img属性
-
-      return this.goodsitem.image
-        ? this.goodsitem.image
-        : this.goodsitem.show.img;
-
+      if(this.goodsitem.image){
+        return this.goodsitem.image
+      }else if(this.goodsitem.img){
+        return this.goodsitem.img
+      }
+      else if(this.goodsitem.show.img){
+        return this.goodsitem.show.img
+      }
+      // return this.goodsitem.image
+      //   ? this.goodsitem.image
+      //   : this.goodsitem.show.img;
       //return this.goodsitem.show.img || this.goodsitem.image 注意逻辑或的前后顺序
     }
   },
